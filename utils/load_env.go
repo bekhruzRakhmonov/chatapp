@@ -8,9 +8,10 @@ import (
 )
 
 func GetDotEnvVariable(key string) string {
-	err := godotenv.Load(".env")
+	err := godotenv.Load("../.env")
 
 	if err != nil {
+		log.Println(err)
 		log.Fatalf("Error loading .env file")
 	}
 

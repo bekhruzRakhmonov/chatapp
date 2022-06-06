@@ -5,14 +5,16 @@ import (
 
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
+
+	"example.com/chatapp/utils"
 )
 
-const (
-	Host     = "localhost"
-	User     = "postgres"
-	Password = "Idonotknow1@"
-	Name     = "chatapp"
-	Port     = "5555"
+var (
+	Host     = utils.GetDotEnvVariable("DBHOST")
+	User     = utils.GetDotEnvVariable("DBUSER")
+	Password = utils.GetDotEnvVariable("DBPASSWORD")
+	Name     = utils.GetDotEnvVariable("DBNAME")
+	Port     = utils.GetDotEnvVariable("DBPORT")
 )
 
 func Setup() (*gorm.DB, error) {

@@ -1,3 +1,5 @@
+// +heroku goVersion go1.18
+
 module example.com/chatapp
 
 go 1.18

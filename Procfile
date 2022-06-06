@@ -1,1 +1,1 @@
-web: example.com/chatapp
+web: chatapp

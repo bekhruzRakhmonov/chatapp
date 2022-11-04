@@ -1,18 +1,17 @@
 package auth
 
 import (
-	_ "encoding/json"
 	"errors"
-	"fmt"
 	"log"
 	"net/http"
+	"strings"
 
 	"github.com/gin-gonic/gin"
-	"gorm.io/gorm"
 
-	"example.com/chatapp/db/config"
+	db "example.com/chatapp/db/config"
 	"example.com/chatapp/db/models"
-	"example.com/chatapp/db/utils"
+	dbutils "example.com/chatapp/db/utils"
+	"time"
 )
 
 type User struct {
@@ -20,11 +19,25 @@ type User struct {
 	Password string `json:"password"`
 }
 
-var users = []User{}
+func (u *User) CheckNotBlank(c *gin.Context) {
+	if u.Username == "" || u.Password == "" {
+		c.IndentedJSON(http.StatusBadRequest,gin.H{
+			"error": "Username or Password not filled",
+		})
+		return
+	}
+}
 
-func createUser(db *gorm.DB, user models.User) (int64, error) {
-	result := db.Create(&user)
-	log.Println(result, *result)
+func (u *User) Validate(uname,psw string) (string,string) {
+	log.Println("User:",u.Username,u.Password)
+	username := strings.TrimSpace(uname)
+	password := strings.TrimSpace(psw)
+
+	return username, password
+}
+
+func createUser(user models.User) (int64, error) {
+	result := db.DB.Create(&user)
 	if result.RowsAffected == 0 {
 		return 0, errors.New("User not created")
 	}
@@ -39,26 +52,11 @@ func CreateUser(c *gin.Context) {
 		return
 	}
 
-	db, err := config.Setup()
+	newUser.CheckNotBlank(c)
 
-	if err != nil {
-		log.Panic(err)
-		return
-	}
+	username,password := newUser.Validate(newUser.Username,newUser.Password)
 
-	hashedPassword, err := utils.HashPassword(newUser.Password)
-	if err != nil {
-		log.Panic("Password does not not hashed")
-		return
-	}
-	user := models.User{
-		Username: newUser.Username,
-		Password: hashedPassword,
-	}
-
-	u,is_registered := utils.GetUser(db, newUser.Username)
-	_ = u
-	fmt.Println("Error:", is_registered)
+	_,is_registered := dbutils.GetUser(username)
 	if is_registered == true {
 		c.IndentedJSON(http.StatusBadRequest, gin.H{
 			"error": "User has already registered.",
@@ -66,12 +64,27 @@ func CreateUser(c *gin.Context) {
 		return
 	}
 
-	result, err := createUser(db, user)
+	start := time.Now()
+	hashedPassword, err := dbutils.HashPassword(password)
 	if err != nil {
-		log.Panic(err)
+		log.Panic("Password does not not hashed")
 		return
 	}
-	log.Println("User created", result)
+	end := time.Since(start)
+	log.Println("Time:",end)
+	
+	user := models.User{
+		Username: newUser.Username,
+		Password: hashedPassword,
+	}
 
-	c.IndentedJSON(http.StatusCreated, newUser)
+	result, err := createUser(user)
+	_ = result
+	if err != nil {
+		log.Println(err)
+		return
+	}
+	accessToken,refreshToken := GenerateTokens(user.Username)
+
+	c.IndentedJSON(http.StatusCreated,gin.H{"access_token": accessToken,"refresh_token":refreshToken})
 }

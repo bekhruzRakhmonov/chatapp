@@ -1,19 +1,19 @@
 package utils
 
-import (
-	"log"
-	"errors"
-	"gorm.io/gorm"
+// import (
+// 	"log"
+// 	"errors"
+// 	"gorm.io/gorm"
 
-	"example.com/chatapp/db/config"
-)
+// 	"example.com/chatapp/db/config"
+// )
 
-func SetupDB() (*gorm.DB,error){
-	db, err := config.Setup()
+// func SetupDB() (*gorm.DB,error){
+// 	db, err := config.Setup()
 
-	if err != nil {
-		log.Panic(err)
-		return db,errors.New("Database connection failed.")
-	}
-	return db,nil
-}
+// 	if err != nil {
+// 		log.Panic(err)
+// 		return db,errors.New("Database connection failed.")
+// 	}
+// 	return db,nil
+// }

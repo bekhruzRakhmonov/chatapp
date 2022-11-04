@@ -10,9 +10,9 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/gorilla/websocket"
-	"github.com/dgrijalva/jwt-go"
+	_"github.com/dgrijalva/jwt-go"
 
-	//  "example.com/chatapp/chat"
+	"example.com/chatapp/db/models"
 	dbutils "example.com/chatapp/db/utils"
 )
 
@@ -107,6 +107,7 @@ func (c *Client) writer() {
 				return
 			}
 
+			// write the message to the writer and close the writer when done
 			w, err := c.conn.NextWriter(websocket.TextMessage)
 
 			if err != nil {
@@ -116,7 +117,7 @@ func (c *Client) writer() {
 			if message.Status == 200 {
 				data,_ := json.Marshal(message)
 				w.Write(data)
-			} else if message.Status == 401 {
+			} else if message.Status != 200 || message.Status != 201 {
 				data,_ := json.Marshal(message)
 				w.Write(data)
 				w.Close()
@@ -154,16 +155,12 @@ func Run(c *gin.Context,is_authorized bool) {
 		return
 	}
 
-	props,_ := c.Get("props")
+	props,exists := c.Get("props")
+    claims,ok := props.(*models.Claims)
 
-	data,_ := props.(jwt.MapClaims)
+	client := &Client{conn: conn, username: claims.Issuer,send: make(chan *result, 256)}
 
-	user,_ := data["user"].(map[string]any)
-	username,_ := user["username"].(string)
-
-	client := &Client{conn: conn, username: username,send: make(chan *result, 256)}
-
-	if !is_authorized {
+	if !is_authorized || !exists || !ok {
 		client.send <- &result{Status: 401,Message: "Unauthorized user"}  // &chat.Message{Send: &chat.ChildMesssage{Status: 401, Message: "Unauthorized user"}}
 		client.writer()
 

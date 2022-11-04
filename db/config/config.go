@@ -2,6 +2,8 @@ package config
 
 import (
 	"fmt"
+	"log"
+	"os"
 
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -17,7 +19,14 @@ var (
 	Port     = utils.GetDotEnvVariable("DBPORT")
 )
 
-func Setup() (*gorm.DB, error) {
+// https://www.velotio.com/engineering-blog/build-a-containerized-microservice-in-golang
+
+var (
+	DB *gorm.DB
+	err error
+)
+
+func Setup() *gorm.DB {
 	connectionString := fmt.Sprintf("host=%s port=%s user=%s dbname=%s password=%s sslmode=disable",
 		Host,
 		Port,
@@ -26,11 +35,16 @@ func Setup() (*gorm.DB, error) {
 		Password,
 	)
 
-	db, err := gorm.Open(postgres.Open(connectionString), &gorm.Config{})
+	DB, err = gorm.Open(postgres.Open(connectionString), &gorm.Config{
+	  SkipDefaultTransaction: true, // for performance reasons
+	})
 
 	if err != nil {
-		return nil, err
+		log.Fatal("Failed to connect to database. \n", err)
+        os.Exit(2)
 	}
+	log.Println("Database connected")
 
-	return db, nil
+	// when you want to migrate to db uncomment this
+	return DB
 }

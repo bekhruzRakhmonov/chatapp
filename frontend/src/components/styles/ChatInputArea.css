@@ -1,0 +1,24 @@
+.chat-input-area {
+
+}
+.chat-input-area > form {
+	margin-bottom: 20px;
+}
+.chat-input-area > form > .form {
+	width: 100vh;
+	background-color: white;
+	border-radius: 18px;
+}
+.chat-input-area > form > .form > .form-controller{
+	display: flex;
+}
+.chat-input-area > form > .form > .form-controller > svg:hover{
+	background-color: rgb(210, 210, 210);
+	border-radius: 50%;
+}
+.chat-input-area > form > .form > .form-controller > input {
+	margin-left: 20px;
+	width: 90vh;
+	border: 0;
+	outline: 0;
+}

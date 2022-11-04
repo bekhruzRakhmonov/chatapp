@@ -1,0 +1,30 @@
+.side-bar {
+	/*background-color: rgb(247, 241, 237);*/
+	background-color:  blanchedalmond;
+	/*background-color: var(--surface-color);*/
+	width: 350px;
+	height: 100vh;
+}
+.side-bar > .side-bar-child > .bar{
+	width: 50vh;
+}
+.side-bar > .side-bar-child > .bar > .bar-chat {
+	width:  44vh;
+	margin-left: 10px;
+	margin-top: 10px;
+	padding: 10px 10px;
+	cursor: pointer;
+}
+
+.side-bar > .side-bar-child > .bar > .bar-chat:hover{
+	background-color: rgb(210, 210, 210);
+	border-radius: 15px;
+}
+.selected {
+	margin-left: 10px;
+	padding: 10px 10px;
+	cursor: pointer;
+	background-color: rgb(210, 210, 210);
+	border-radius: 15px;
+}
+

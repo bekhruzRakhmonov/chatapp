@@ -1,0 +1,17 @@
+.search-container {
+    width: 45vh;
+}
+
+.search-container > #search-input {
+	margin-left: 10px;
+	width: 45vh;
+	border-radius: 15px;
+    border: 1px solid white;
+}
+
+.search-container > #search-input:hover {
+	border: 1px solid black;
+}
+.search-container > #search-input::placeholder {
+    opacity: 1;
+}

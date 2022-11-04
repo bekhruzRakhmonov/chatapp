@@ -1,0 +1,106 @@
+.no-messages-yet {
+  margin-top: 250px;
+  text-align: center;
+}
+
+.loading {
+  margin-top: 250px;
+  display: inline-block;
+  position: relative;
+  width: 80px;
+  height: 80px;
+}
+.loading div {
+  display: inline-block;
+  position: absolute;
+  left: 8px;
+  width: 16px;
+  background: #fff;
+  animation: loading 1.2s cubic-bezier(0, 0.5, 0.5, 1) infinite;
+}
+.loading div:nth-child(1) {
+  left: 8px;
+  animation-delay: -0.24s;
+}
+.loading div:nth-child(2) {
+  left: 32px;
+  animation-delay: -0.12s;
+}
+.loading div:nth-child(3) {
+  left: 56px;
+  animation-delay: 0;
+}
+@keyframes loading {
+  0% {
+    top: 8px;
+    height: 64px;
+  }
+  50%, 100% {
+    top: 24px;
+    height: 32px;
+  }
+}
+
+.chat-message-area {
+	max-height: 500px;
+  overflow: auto;
+}
+
+.chat-message-area::-webkit-scrollbar {
+  width: 12px;               /* width of the entire scrollbar */
+}
+.chat-message-area::-webkit-scrollbar-track {
+  background: wheat;        /* color of the tracking area */
+}
+.chat-message-area::-webkit-scrollbar-thumb {
+  background-color: hsl(0,0%,67%);    /* color of the scroll thumb */
+  border-radius: 20px;       /* roundness of the scroll thumb */
+  border: 3px solid wheat;  /* creates padding around scroll thumb */
+}
+
+/*.chat-messages {
+	display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-content: space-around;
+    justify-content: space-evenly;
+    align-items: center;
+    margin-top: 20px;
+}*/
+.chat-messages {
+	display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  align-content: center;
+  justify-content: center;
+  align-items: stretch;
+  margin-top: 20px;
+}
+.outbound-message {
+	margin-top: 3px;
+	margin-left: 530px;
+	background-color: #00171f;/* #03045e */
+	text-align: center;
+	padding: 10px 10px;
+	min-height: 15px;
+	max-width: 250px;
+	border-radius: 12px 0px 12px 12px;
+
+	color: white;
+}
+.inbound-message {
+	margin-top: 10px;
+	margin-right: 530px;
+	background-color: #ffff;
+	text-align: center;
+	padding: 10px 10px;
+	min-height: 15px;
+	max-width: 250px;
+	border-radius: 0px 12px 12px 12px;
+
+	color: black;
+}
+
+#message {
+	font-family: "Times New Roman", Times, serif;
+}
